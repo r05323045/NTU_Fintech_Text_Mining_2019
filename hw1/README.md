@@ -1,5 +1,8 @@
 # ETF_Scraper
-## A simple scraper for ETF, scrape data from morningstar
+## A simple scraper for ETF, scrape data from [morningstar](https://www.morningstar.com/)
+
+![plot](https://github.com/r05323045/NTU_Fintech_Text_Mining_2019/blob/master/hw1/images/plot.gif)
+
 ---
 ## Usage
 Only work on jupyter notebook (sorry...)
