@@ -28,8 +28,8 @@ Moreover, you can get data by change `plot()` to `data()` :
 etf_scraper(etf = 'USO', startdate = '2015-12-31', enddate = '2018-12-31').data(data_type = 'nav')
 ```
 The `data()` function can scrape volume, price or nav, you can choose the data you want among these three different types.
-There are three options `'nav'` , `price` and `'volume'`, default is `'all'`.
+There are three options `'nav'` , `price` and `'volume'`, default is `'nav'`.
 
 ## Note:  
-- 還請同組資工大神們幫忙除蟲或提供更好的寫法，thx !
+- 目前爬蟲速度很慢QQ 還請同組資工大神們幫忙除蟲或提供更好的寫法，thx !
 
