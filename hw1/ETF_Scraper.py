@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-# 執行時間滿久的，希望之後能找到更好的寫法，也請大神們多提供意見！
 
+# 執行時間滿久的，希望之後能找到更好的寫法，也請大神們多提供意見！
 import time
 import numpy as np
 import pandas as pd
@@ -35,7 +35,8 @@ class etf_scraper:
         #為了讓下面的data()可以拿到secID
         global secID
         #部分etf已經下市，在morningstar的搜尋頁面會搜尋不到
-        global exist
+        global exist        
+        
         soup_dic = json.loads(soup.find_all("div", {"class":"search-list-content"})[0]['data-initialdata'])
         for i in soup_dic['m'][0]['r']:
             if i['OS001'] == self.etf.upper():
@@ -48,10 +49,9 @@ class etf_scraper:
         time.sleep(delay)
         
         return None
-    
+        
     #step2 : 用step1得到的secID取得該檔etf的資料網址，進入該頁面爬資料
     def data(self, data_type = 'nav'):
-        
         #不同的資料有不同的網址
         if data_type == 'nav':
             dataid = '8217'
@@ -84,7 +84,6 @@ class etf_scraper:
         regex = r"\{\S+\}"
         matches = re.finditer(regex, str(data_soup), re.MULTILINE)
         global matchNum, match
-        matchNum = 0
         for matchNum, match in enumerate(matches):
             pass
         js_data = "{match}".format(matchNum = matchNum, start = match.start(), end = match.end(), match = match.group())
@@ -102,6 +101,7 @@ class etf_scraper:
         
         #這邊廢code很多QQ
         #為避免error，先創一堆空的dict（相信這邊有更好的寫法XD）
+        
         nav_data = dict()
         price_data = dict()
         volume_data = dict()
