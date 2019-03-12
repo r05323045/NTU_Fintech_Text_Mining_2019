@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-#執行時間滿久的，希望大神們提供更好的爬法thx
+# 執行時間滿久的，希望之後能找到更好的寫法，也請大神們多提供意見！
 
 import time
 import numpy as np
@@ -20,7 +20,8 @@ class etf_scraper:
         self.startdate = startdate
         self.enddate = enddate
     
-    def getsecID(self, sec = 1):    #爬蟲1，先拿secID，以連結到etf的資料網站
+    #step1 : 進入morningstar的搜尋頁面爬取secID
+    def getsecID(self, sec = 1):
         
         url = 'https://www.morningstar.com/search.html?q={etf}'
         url = url.format(etf = self.etf)
@@ -31,11 +32,10 @@ class etf_scraper:
         soup = BeautifulSoup(result.content, 'html.parser')
         global etf_name
         etf_name = self.etf
-        #為了讓下面的data function可以收到secID
+        #為了讓下面的data()可以拿到secID
         global secID
-        #有些etf已經下市，若已經下市，morningstar會搜尋不到
-        global exist        
-        
+        #部分etf已經下市，在morningstar的搜尋頁面會搜尋不到
+        global exist
         soup_dic = json.loads(soup.find_all("div", {"class":"search-list-content"})[0]['data-initialdata'])
         for i in soup_dic['m'][0]['r']:
             if i['OS001'] == self.etf.upper():
@@ -48,10 +48,11 @@ class etf_scraper:
         time.sleep(delay)
         
         return None
-        
     
-    def data(self, data_type = 'nav'):  #爬蟲2，拿到secID後，進到該etf的資料網站爬資料
+    #step2 : 用step1得到的secID取得該檔etf的資料網址，進入該頁面爬資料
+    def data(self, data_type = 'nav'):
         
+        #不同的資料有不同的網址
         if data_type == 'nav':
             dataid = '8217'
         elif data_type == 'price':
@@ -90,9 +91,7 @@ class etf_scraper:
         raw_data = raw_data['data']['r'][0]['t'][0]['d']
             
         data = dict()
-        data[self.etf.upper()] = dict()
-        for i in raw_data:
-            data[self.etf.upper()][i['i']] = float(i['v'])
+        data[self.etf.upper()] = {i['i'] : float(i['v']) for i in raw_data}
         
         return data
     
@@ -100,8 +99,8 @@ class etf_scraper:
         
         self.getsecID(sec = 1)
         
-        #以下一堆廢code，有時間再改XD
-        
+        #這邊廢code很多QQ
+        #為避免error，先創一堆空的dict（相信這邊有更好的寫法XD）
         nav_data = dict()
         price_data = dict()
         volume_data = dict()
@@ -119,23 +118,13 @@ class etf_scraper:
             price_data = self.data(data_type = 'price')
         else:
             return 'Sorry, plt_type should be nav, price or all'
-            
-        nav_date = [datetime.strptime(i, "%Y-%m-%d") for i in nav_data[self.etf.upper()]]
-        nav_lst = [nav_data[self.etf.upper()][i] for i in nav_data[self.etf.upper()]]
         
-        price_date = [datetime.strptime(i, "%Y-%m-%d") for i in price_data[self.etf.upper()]]
-        price_lst = [price_data[self.etf.upper()][i] for i in price_data[self.etf.upper()]]
-        
-        volume_date = [datetime.strptime(i, "%Y-%m-%d") for i in volume_data[self.etf.upper()]]
-        volume_lst = [volume_data[self.etf.upper()][i] for i in volume_data[self.etf.upper()]]
-
-        #使用highchart中的highstock畫圖
-
+        #用highchart裡的hichstock畫圖
         H = Highstock()
 
-        nav_high_data = [[nav_date[i], nav_lst[i]] for i in range(len(nav_data[self.etf.upper()]))]
-        price_high_data = [[price_date[i], price_lst[i]] for i in range(len(price_data[self.etf.upper()]))]
-        volume_high_data = [[volume_date[i], volume_lst[i]] for i in range(len(volume_data[self.etf.upper()]))]
+        nav_high_data = [[datetime.strptime(i, "%Y-%m-%d"), nav_data[list(nav_data.keys())[0]][i]] for i in nav_data[list(nav_data.keys())[0]]]
+        price_high_data = [[datetime.strptime(i, "%Y-%m-%d"), price_data[list(price_data.keys())[0]][i]] for i in price_data[list(price_data.keys())[0]]]
+        volume_high_data = [[datetime.strptime(i, "%Y-%m-%d"), volume_data[list(volume_data.keys())[0]][i]] for i in volume_data[list(volume_data.keys())[0]]]
         
         if plt_type == 'all':
             H.add_data_set(price_high_data, 'line', 'price', id = 'dataseries', color = '#969696', tooltip = {'valueDecimals': 4})
