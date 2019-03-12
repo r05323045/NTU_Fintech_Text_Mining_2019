@@ -84,6 +84,7 @@ class etf_scraper:
         regex = r"\{\S+\}"
         matches = re.finditer(regex, str(data_soup), re.MULTILINE)
         global matchNum, match
+        matchNum = 0
         for matchNum, match in enumerate(matches):
             pass
         js_data = "{match}".format(matchNum = matchNum, start = match.start(), end = match.end(), match = match.group())
