@@ -45,8 +45,6 @@ class etf_scraper:
                 break
             else:
                 exist = False
-        delay = np.random.uniform(min(sec - 1, 0), sec + 1)
-        time.sleep(delay)
         
         return None
         
