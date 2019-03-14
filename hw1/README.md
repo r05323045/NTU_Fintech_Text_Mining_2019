@@ -50,7 +50,7 @@ There are three options `'nav'` , `price` and `'volume'`, default is `'nav'`.
 ![r3](images/randomly_pick_3_etf.png)
 
 - visualization of all ETFs (monthly data)  
-Can choose single ETF by `dropdown menu`
+Can observe different types of ETF (Crude Oil, Gold) or range by `dropdown menu`
 
 ![plotly](images/plotly_for_all_etf.png)
 
@@ -59,5 +59,5 @@ Can choose single ETF by `dropdown menu`
 
 
 ### Note:  
-- 目前爬蟲速度很慢QQ 還請同組資工大神們幫忙除蟲或提供更好的寫法，thx !
+- 目前爬蟲速度很慢QQ 還請同組資工大神們幫忙除蟲或提供更好的寫法，THX !
 
