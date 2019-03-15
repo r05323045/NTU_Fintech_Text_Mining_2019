@@ -97,6 +97,9 @@ class etf_scraper:
         
         self.getsecID(sec = 1)
         
+        if not exist:
+            return self.etf + ' ceased trading'
+        
         #這邊廢code很多QQ
         #為避免error，先創一堆空的dict（相信這邊有更好的寫法XD）
         
